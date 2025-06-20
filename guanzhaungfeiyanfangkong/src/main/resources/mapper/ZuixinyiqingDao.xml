@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.ZuixinyiqingDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.zuixinyiqing_name as zuixinyiqingName
+        ,a.xinzengrenshu as xinzengrenshu
+        ,a.zongrenshu as zongrenshu
+        ,a.zhiyurenshu as zhiyurenshu
+        ,a.siwangrenshu as siwangrenshu
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.ZuixinyiqingView" >
+        SELECT
+        <include refid="Base_Column_List" />
+
+--         级联表的字段
+
+        FROM zuixinyiqing  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.zuixinyiqingName != '' and params.zuixinyiqingName != null and params.zuixinyiqingName != 'null' ">
+                and a.zuixinyiqing_name like CONCAT('%',#{params.zuixinyiqingName},'%')
+            </if>
+            <if test="params.xinzengrenshuStart != null and params.xinzengrenshuStart != ''">
+                <![CDATA[  and a.xinzengrenshu >= #{params.xinzengrenshuStart}   ]]>
+            </if>
+            <if test="params.xinzengrenshuEnd != null and params.xinzengrenshuEnd != ''">
+                <![CDATA[  and a.xinzengrenshu <= #{params.xinzengrenshuEnd}   ]]>
+            </if>
+             <if test="params.xinzengrenshu != null and params.xinzengrenshu != ''">
+                and a.xinzengrenshu = #{params.xinzengrenshu}
+             </if>
+            <if test="params.zongrenshuStart != null and params.zongrenshuStart != ''">
+                <![CDATA[  and a.zongrenshu >= #{params.zongrenshuStart}   ]]>
+            </if>
+            <if test="params.zongrenshuEnd != null and params.zongrenshuEnd != ''">
+                <![CDATA[  and a.zongrenshu <= #{params.zongrenshuEnd}   ]]>
+            </if>
+             <if test="params.zongrenshu != null and params.zongrenshu != ''">
+                and a.zongrenshu = #{params.zongrenshu}
+             </if>
+            <if test="params.zhiyurenshuStart != null and params.zhiyurenshuStart != ''">
+                <![CDATA[  and a.zhiyurenshu >= #{params.zhiyurenshuStart}   ]]>
+            </if>
+            <if test="params.zhiyurenshuEnd != null and params.zhiyurenshuEnd != ''">
+                <![CDATA[  and a.zhiyurenshu <= #{params.zhiyurenshuEnd}   ]]>
+            </if>
+             <if test="params.zhiyurenshu != null and params.zhiyurenshu != ''">
+                and a.zhiyurenshu = #{params.zhiyurenshu}
+             </if>
+            <if test="params.siwangrenshuStart != null and params.siwangrenshuStart != ''">
+                <![CDATA[  and a.siwangrenshu >= #{params.siwangrenshuStart}   ]]>
+            </if>
+            <if test="params.siwangrenshuEnd != null and params.siwangrenshuEnd != ''">
+                <![CDATA[  and a.siwangrenshu <= #{params.siwangrenshuEnd}   ]]>
+            </if>
+             <if test="params.siwangrenshu != null and params.siwangrenshu != ''">
+                and a.siwangrenshu = #{params.siwangrenshu}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+
+        </where>
+
+        order by a.${params.orderBy} desc 
+    </select>
+
+</mapper>
